@@ -92,6 +92,16 @@ export async function POST(request: NextRequest) {
       "unknown";
 
     // ── Save to Supabase ──────────────────────────────
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Database connection not configured. Please check environment variables.",
+        },
+        { status: 500 }
+      );
+    }
+
     const { data: submission, error: dbError } = await supabaseAdmin
       .from("contacts")
       .insert({

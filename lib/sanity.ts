@@ -3,18 +3,22 @@ import { createImageUrlBuilder } from "@sanity/image-url";
 import { SanityImage } from "@/types";
 
 // ─── Sanity Client ────────────────────────────────────
-export const sanityClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
-  apiVersion: "2024-01-01",
-  useCdn: true, // fast cached reads for frontend
-  token: process.env.SANITY_API_TOKEN,
-});
+// Only initialize if we have valid project ID
+export const sanityClient = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your-project-id'
+  ? createClient({
+      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+      apiVersion: "2024-01-01",
+      useCdn: true, // fast cached reads for frontend
+      token: process.env.SANITY_API_TOKEN,
+    })
+  : null;
 
 // ─── Image URL Builder ────────────────────────────────
-const builder = createImageUrlBuilder(sanityClient);
+const builder = sanityClient ? createImageUrlBuilder(sanityClient) : null;
 
 export function urlFor(source: SanityImage) {
+  if (!builder) return null;
   return builder.image(source);
 }
 
@@ -99,21 +103,26 @@ export const ALL_SLUGS_QUERY = `
 
 // ─── Fetch Helpers ────────────────────────────────────
 export async function getAllPosts() {
+  if (!sanityClient) return [];
   return sanityClient.fetch(ALL_POSTS_QUERY);
 }
 
 export async function getFeaturedPost() {
+  if (!sanityClient) return null;
   return sanityClient.fetch(FEATURED_POST_QUERY);
 }
 
 export async function getRecentPosts() {
+  if (!sanityClient) return [];
   return sanityClient.fetch(RECENT_POSTS_QUERY);
 }
 
 export async function getPostBySlug(slug: string) {
+  if (!sanityClient) return null;
   return sanityClient.fetch(POST_BY_SLUG_QUERY, { slug });
 }
 
 export async function getAllSlugs() {
+  if (!sanityClient) return [];
   return sanityClient.fetch(ALL_SLUGS_QUERY);
 }

@@ -3,7 +3,9 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+const resend = process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_your-key-here'
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 // ─── Validation Schema ────────────────────────────────
 const contactSchema = z.object({
@@ -120,7 +122,8 @@ export async function POST(request: NextRequest) {
     }
 
     // ── Send Notification Email to Aditya ─────────────
-    try {
+    if (resend) {
+      try {
       await resend.emails.send({
         from: "Leavron Leads <noreply@leavron.in>",
         to: [process.env.NOTIFICATION_EMAIL!],
@@ -191,9 +194,11 @@ export async function POST(request: NextRequest) {
     } catch (emailError) {
       console.error("Email send failed:", emailError);
     }
+    }
 
     // ── Send Confirmation Email to Client ─────────────
-    try {
+    if (resend) {
+      try {
       await resend.emails.send({
         from: "Aditya Singh — Leavron <aditya@leavron.in>",
         to: [data.email],
@@ -238,6 +243,7 @@ export async function POST(request: NextRequest) {
       });
     } catch (confirmEmailError) {
       console.error("Confirmation email failed:", confirmEmailError);
+    }
     }
 
     return NextResponse.json(

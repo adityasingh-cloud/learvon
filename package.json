@@ -1,0 +1,35 @@
+{
+  "name": "leavron",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.1.0",
+    "@sanity/client": "^4.0.1",
+    "@sanity/image-url": "^2.1.1",
+    "@supabase/auth-helpers-nextjs": "^0.15.0",
+    "@supabase/supabase-js": "^2.44.0",
+    "next": "13.5.4",
+    "next-sanity": "4.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.48.0",
+    "resend": "^1.0.0",
+    "styled-components": "^5.3.11",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/nodemailer": "^6.0.0",
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "13.5.4",
+    "typescript": "^5.6.0"
+  }
+}

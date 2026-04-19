@@ -27,6 +27,11 @@
         "./*"
       ]
     },
+    "ignoreDeprecations": "6.0",
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
     "plugins": [
       {
         "name": "next"
